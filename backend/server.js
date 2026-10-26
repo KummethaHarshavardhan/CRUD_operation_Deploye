@@ -5,7 +5,7 @@ const connectDB = require("./config/db");
 const productRoutes = require("./routes/products");
 
 const app = express();
-
+// this is connection of mongoDB 
 connectDB();
 
 const allowedOrigins = process.env.CLIENT_URL
