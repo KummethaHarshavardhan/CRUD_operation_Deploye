@@ -8,7 +8,21 @@ const app = express();
 
 connectDB();
 
-app.use(cors());
+const allowedOrigins = process.env.CLIENT_URL
+  ? process.env.CLIENT_URL.split(",").map((o) => o.trim().replace(/\/+$/, ""))
+  : null;
+
+app.use(
+  cors({
+    origin: allowedOrigins
+      ? (origin, callback) => {
+          // Allow server-to-server / curl requests with no Origin header
+          if (!origin || allowedOrigins.includes(origin)) return callback(null, true);
+          callback(new Error("Not allowed by CORS"));
+        }
+      : true,
+  })
+);
 app.use(express.json());
 
 app.use("/api/products", productRoutes);
